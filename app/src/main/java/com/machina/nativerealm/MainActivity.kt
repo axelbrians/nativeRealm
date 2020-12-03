@@ -3,6 +3,9 @@ package com.machina.nativerealm
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -25,28 +28,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.listNotesToolbar))
+
         val notesRV: RecyclerView = findViewById(R.id.notesRV)
 
         realm = Realm.getDefaultInstance()
-        clearItem()
         val query = realm.where<NotesSchema>().findAll()
         notesAdapter = NotesAdapter(query)
 
-       notesRV.apply{
+        notesRV.apply{
             layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
             adapter = notesAdapter
             itemAnimator = DefaultItemAnimator()
         }
-
-        FloatBtn = findViewById(R.id.addNotesBtn)
-        FloatBtn.setOnClickListener(this)
+        setViewReference()
     }
 
     override fun onResume() {
         super.onResume()
+        refresh()
         Log.d("debugging", "onresume main")
-        val query = realm.where<NotesSchema>().findAll()
-        this.notesAdapter.addNote(query)
     }
 
     override fun onDestroy() {
@@ -54,6 +55,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         realm.close()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_list_notes, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return when (item.itemId) {
+            R.id.action_deleteAll -> {
+                clearItem()
+                refresh()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
     override fun onClick(v: View?) {
         startActivity(Intent(this, AddNotesActivity::class.java))
@@ -77,10 +95,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //        }
 //    }
 
+    private fun setViewReference(){
+        FloatBtn = findViewById(R.id.addNotesBtn)
+        FloatBtn.setOnClickListener(this)
+    }
+
     private fun clearItem(){
         realm.executeTransaction{
             val query = realm.where<NotesSchema>().findAll()
             query.deleteAllFromRealm()
         }
+    }
+
+    private fun refresh(){
+        val query = realm.where<NotesSchema>().findAll()
+        this.notesAdapter.refresh(query)
     }
 }

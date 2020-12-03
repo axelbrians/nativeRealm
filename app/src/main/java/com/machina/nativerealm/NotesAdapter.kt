@@ -15,6 +15,11 @@ class NotesAdapter(
         notifyDataSetChanged()
     }
 
+    fun refresh(note: RealmResults<NotesSchema>) {
+        this.notesList = note
+        notifyDataSetChanged()
+    }
+
     fun removeItem(note: NotesSchema) {
         notifyDataSetChanged()
     }

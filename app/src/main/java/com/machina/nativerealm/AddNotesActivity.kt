@@ -18,6 +18,8 @@ class AddNotesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_notes)
+        setSupportActionBar(findViewById(R.id.addNotesToolbar))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         realm = Realm.getDefaultInstance()
         titleForm = findViewById(R.id.titleForm)
@@ -29,18 +31,20 @@ class AddNotesActivity : AppCompatActivity() {
         val titleText = titleForm.text.toString()
         val noteText = noteForm.text.toString()
         addItem(titleText, noteText)
+
+
         Log.d("debugging", "onPause add note")
     }
 
 
     private fun addItem(titleText: String, noteText: String){
         realm.executeTransaction{
-
-
             val newNote = realm.createObject<NotesSchema>(getId())
             newNote.title = titleText
             newNote.note = noteText
             realm.copyToRealmOrUpdate(newNote)
+
+
             Log.d(null, "added item to realm")
         }
     }
