@@ -67,27 +67,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         return when (item.itemId) {
-            R.id.action_deleteAll -> {
 
+            R.id.action_deleteAll -> {
+//                create a confirmation dialog when pressed
                 confirmDialog = AlertDialog.Builder(this).create()
                 confirmDialog.apply {
                     setTitle("Delete all notes?")
-                    setButton(DialogInterface.BUTTON_POSITIVE,"Delete all",
-                        DialogInterface.OnClickListener { dialog, id ->
+
+//                  confirming the action
+                    setButton(DialogInterface.BUTTON_POSITIVE,"Delete all") {
+//                        DialogInterface.OnClickListener
+                            dialog, id ->
                             clearItem()
                             refresh()
-                        })
-                    setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            // User cancelled the dialog
+                    }
+
+//                  cancel the action
+                    setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel") {
+//                        DialogInterface.OnClickListener
+                            dialog, id ->
                             dialog.dismiss()
-                        })
+                    }
                 }
+//              show the dialog that created
                 confirmDialog.show()
-
-
                 true
-            }
+            } //end of action_deleteAll
+
             else -> super.onOptionsItemSelected(item)
         }
     }
