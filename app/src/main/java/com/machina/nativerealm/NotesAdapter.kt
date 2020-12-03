@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import io.realm.RealmResults
 
 class NotesAdapter(
-        var notesList: RealmResults<NotesSchema>
+        private var notesList: RealmResults<NotesSchema>
 ) : RecyclerView.Adapter<NotesHolder>() {
 
     fun addNote(note: RealmResults<NotesSchema>) {

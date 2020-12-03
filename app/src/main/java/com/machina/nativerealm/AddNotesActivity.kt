@@ -32,6 +32,7 @@ class AddNotesActivity : AppCompatActivity() {
         Log.d("debugging", "onPause add note")
     }
 
+
     private fun addItem(titleText: String, noteText: String){
         realm.executeTransaction{
 

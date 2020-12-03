@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.realm.Realm
 import io.realm.kotlin.createObject
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         notesAdapter = NotesAdapter(query)
 
        notesRV.apply{
-            layoutManager = LinearLayoutManager(this@MainActivity)
+            layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
             adapter = notesAdapter
             itemAnimator = DefaultItemAnimator()
         }
@@ -46,6 +47,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         Log.d("debugging", "onresume main")
         val query = realm.where<NotesSchema>().findAll()
         this.notesAdapter.addNote(query)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        realm.close()
     }
 
 
