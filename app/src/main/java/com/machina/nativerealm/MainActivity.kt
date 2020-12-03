@@ -1,5 +1,6 @@
 package com.machina.nativerealm
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,11 +21,10 @@ import io.realm.kotlin.where
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var FloatBtn: FloatingActionButton
+    private lateinit var floatBtn: FloatingActionButton
     private lateinit var notesAdapter: NotesAdapter
     private lateinit var realm: Realm
-
-
+    private lateinit var confirmDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,51 +56,49 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         realm.close()
     }
 
+//    function to inflate item in toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_list_notes, menu)
         return true
     }
 
+//    handle action item in toolbar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
         return when (item.itemId) {
             R.id.action_deleteAll -> {
-                clearItem()
-                refresh()
+
+                confirmDialog = AlertDialog.Builder(this).create()
+                confirmDialog.apply {
+                    setTitle("Delete all notes?")
+                    setButton(DialogInterface.BUTTON_POSITIVE,"Delete all",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            clearItem()
+                            refresh()
+                        })
+                    setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            // User cancelled the dialog
+                            dialog.dismiss()
+                        })
+                }
+                confirmDialog.show()
+
+
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun onClick(v: View?) {
-        startActivity(Intent(this, AddNotesActivity::class.java))
-    }
-//
-//    private fun addItem(titleText: String, noteText: String){
-//        realm.executeTransaction{
-//            // Get the current max id in the EntityName table
-//            val id: Number? = realm.where<NotesSchema>().max("id")
-//            // If id is null, set it to 1, else set increment it by 1
-//            val nextId = if (id == null) 1 else id.toInt() + 1
-//
-//
-//            val newNote = realm.createObject<NotesSchema>(nextId)
-//            newNote.title = titleText
-//            newNote.note = noteText
-//            realm.copyToRealmOrUpdate(newNote)
-//
-//            val query = realm.where<NotesSchema>().findAll()
-//            this.notesAdapter.addNote(query)
-//        }
-//    }
-
+//    initiate btn reference and clickListener
     private fun setViewReference(){
-        FloatBtn = findViewById(R.id.addNotesBtn)
-        FloatBtn.setOnClickListener(this)
+        floatBtn = findViewById(R.id.addNotesBtn)
+        floatBtn.setOnClickListener(this)
     }
 
+//    realm transaction to delete all records
     private fun clearItem(){
         realm.executeTransaction{
             val query = realm.where<NotesSchema>().findAll()
@@ -107,8 +106,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+//    method to refresh dataRecord in recyclerView
     private fun refresh(){
         val query = realm.where<NotesSchema>().findAll()
         this.notesAdapter.refresh(query)
+    }
+
+    override fun onClick(v: View?) {
+        startActivity(Intent(this, AddNotesActivity::class.java))
     }
 }
