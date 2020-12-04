@@ -4,21 +4,20 @@
     android:id="@+id/notesCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
     android:elevation="5dp"
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/notesTitleTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="This is title"
-            android:textSize="18sp"
+            android:textSize="17sp"
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
@@ -26,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Content of the notes goes here"
-            android:textSize="15sp"
+            android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/notesTitleTV" />
 
 

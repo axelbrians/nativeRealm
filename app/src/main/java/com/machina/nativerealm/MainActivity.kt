@@ -3,7 +3,6 @@ package com.machina.nativerealm
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -17,10 +16,12 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.machina.nativerealm.customInterface.OnClickNotes
 import com.machina.nativerealm.model.NotesSchema
+import com.machina.nativerealm.recycler.GridSpacingItemDecoration
 import com.machina.nativerealm.recycler.NotesAdapter
 import io.realm.Realm
 import io.realm.RealmResults
 import io.realm.kotlin.where
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
 
@@ -36,12 +37,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
         setSupportActionBar(findViewById(R.id.listNotesToolbar))
 
         val notesRV: RecyclerView = findViewById(R.id.notesRV)
-
         setRealm()
+
+        val spacing = 20
+        val staggeredGrid = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        staggeredGrid.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
         notesRV.apply{
-            layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+            layoutManager = staggeredGrid
             adapter = notesAdapter
             itemAnimator = DefaultItemAnimator()
+            addItemDecoration(GridSpacingItemDecoration(spacing))
         }
         setViewReference()
     }
@@ -70,18 +75,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
                     setTitle("Delete all notes?")
 
 //                  confirming the action
-                    setButton(DialogInterface.BUTTON_POSITIVE,"Delete all") {
+                    setButton(DialogInterface.BUTTON_POSITIVE, "Delete all") {
 //                        DialogInterface.OnClickListener
-                            dialog, id ->
-                            clearItem()
-                            refresh()
+                        dialog, id ->
+                        clearItem()
+                        refresh()
                     }
 
 //                  cancel the action
                     setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel") {
 //                        DialogInterface.OnClickListener
-                            dialog, id ->
-                            dialog.dismiss()
+                        dialog, id ->
+                        dialog.dismiss()
                     }
                 }
 //              show the dialog that created
@@ -131,8 +136,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
     private fun setRealm(){
         realm = Realm.getDefaultInstance()
         entries = realm.where<NotesSchema>().findAll()
-        entries.addChangeListener {
-            query -> notesAdapter.refresh(query)
+        entries.addChangeListener { query -> notesAdapter.refresh(query)
         }
         notesAdapter = NotesAdapter(entries)
         notesAdapter.onClickNotes = this

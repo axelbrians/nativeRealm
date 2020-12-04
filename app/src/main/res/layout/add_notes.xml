@@ -19,8 +19,9 @@
         android:id="@+id/titleForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="15dp"
         android:inputType="textMultiLine"
+        android:textSize="17sp"
         android:hint="Title"
         android:background="@android:color/transparent"/>
 
@@ -28,7 +29,9 @@
         android:id="@+id/noteForm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="14sp"
         android:inputType="textMultiLine"
         android:hint="Note"
         android:background="@android:color/transparent"/>

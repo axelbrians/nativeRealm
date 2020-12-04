@@ -32,21 +32,22 @@ class EditNotesActivity : AppCompatActivity() {
         Log.d("debugging", "onPause add note")
     }
 
+//    launch editItem onDestroy
     override fun onDestroy() {
         super.onDestroy()
         val titleText = titleForm.text.toString()
         val noteText = noteForm.text.toString()
 
         if(titleText.isNotEmpty() || noteText.isNotEmpty()) {
-            addItem(titleText, noteText)
+            editItem(titleText, noteText)
         }
         Log.d("debugging", "onDestroy add note")
     }
 
 
 
-    //  handle adding item to realm db record
-    private fun addItem(titleText: String, noteText: String){
+    //  handle edit item in realm record
+    private fun editItem(titleText: String, noteText: String){
         val id = intent.getIntExtra("EXTRA_ID", 0)
         realm.executeTransaction{
             val newNote = realm.where(NotesSchema::class.java).equalTo("id", id).findFirst()
@@ -54,8 +55,6 @@ class EditNotesActivity : AppCompatActivity() {
                 newNote.title = titleText
                 newNote.note = noteText
             }
-
-
             Log.d(null, "edited item with id: $id")
         }
     }
