@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.realm.Realm
+import io.realm.RealmChangeListener
+import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var floatBtn: FloatingActionButton
     private lateinit var notesAdapter: NotesAdapter
     private lateinit var realm: Realm
+    private lateinit var entries: RealmResults<NotesSchema>
     private lateinit var confirmDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,22 +36,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val notesRV: RecyclerView = findViewById(R.id.notesRV)
 
-        realm = Realm.getDefaultInstance()
-        val query = realm.where<NotesSchema>().findAll()
-        notesAdapter = NotesAdapter(query)
-
+        setRealm()
         notesRV.apply{
             layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
             adapter = notesAdapter
             itemAnimator = DefaultItemAnimator()
         }
         setViewReference()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        refresh()
-        Log.d("debugging", "onresume main")
     }
 
     override fun onDestroy() {
@@ -120,5 +114,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         startActivity(Intent(this, AddNotesActivity::class.java))
+    }
+
+    private fun setRealm(){
+        realm = Realm.getDefaultInstance()
+        entries = realm.where<NotesSchema>().findAll()
+        entries.addChangeListener {
+            query -> notesAdapter.refresh(query)
+        }
+        notesAdapter = NotesAdapter(entries)
     }
 }

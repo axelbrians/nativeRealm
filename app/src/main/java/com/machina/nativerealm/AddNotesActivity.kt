@@ -30,13 +30,24 @@ class AddNotesActivity : AppCompatActivity() {
 //    launch addItem() when paused, is not perfect yet
     override fun onPause() {
         super.onPause()
-        val titleText = titleForm.text.toString()
-        val noteText = noteForm.text.toString()
-        addItem(titleText, noteText)
+//        val titleText = titleForm.text.toString()
+//        val noteText = noteForm.text.toString()
+//        addItem(titleText, noteText)
 
 
         Log.d("debugging", "onPause add note")
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val titleText = titleForm.text.toString()
+        val noteText = noteForm.text.toString()
+        addItem(titleText, noteText)
+
+        Log.d("debugging", "onDestroy add note")
+    }
+
+
 
 //  handle adding item to realm db record
     private fun addItem(titleText: String, noteText: String){
