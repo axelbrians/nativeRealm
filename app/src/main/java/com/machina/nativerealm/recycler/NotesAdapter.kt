@@ -1,30 +1,22 @@
-package com.machina.nativerealm
+package com.machina.nativerealm.recycler
 
-import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.machina.nativerealm.model.NotesSchema
+import com.machina.nativerealm.R
+import com.machina.nativerealm.customInterface.OnClickNotes
 import io.realm.RealmResults
 
 class NotesAdapter(
         private var notesList: RealmResults<NotesSchema>
 ) : RecyclerView.Adapter<NotesHolder>() {
 
-    fun addNote(note: RealmResults<NotesSchema>) {
-        this.notesList = note
-        notifyDataSetChanged()
-    }
+    var onClickNotes: OnClickNotes? = null
 
     fun refresh(note: RealmResults<NotesSchema>) {
         this.notesList = note
-        notifyDataSetChanged()
-    }
-
-    fun removeItem(note: NotesSchema) {
-        notifyDataSetChanged()
-    }
-
-    fun clear() {
         notifyDataSetChanged()
     }
 
@@ -34,7 +26,7 @@ class NotesAdapter(
     }
 
     override fun onBindViewHolder(holder: NotesHolder, position: Int) {
-        holder.bind(notesList[position]!!)
+        holder.bind(notesList[position]!!, onClickNotes)
     }
 
     override fun getItemCount(): Int {

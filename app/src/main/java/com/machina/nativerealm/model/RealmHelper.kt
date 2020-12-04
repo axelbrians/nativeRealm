@@ -1,4 +1,4 @@
-package com.machina.nativerealm
+package com.machina.nativerealm.model
 
 import io.realm.Realm
 

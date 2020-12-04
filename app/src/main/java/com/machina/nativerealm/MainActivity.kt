@@ -15,13 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.machina.nativerealm.customInterface.OnClickNotes
+import com.machina.nativerealm.model.NotesSchema
+import com.machina.nativerealm.recycler.NotesAdapter
 import io.realm.Realm
-import io.realm.RealmChangeListener
 import io.realm.RealmResults
-import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 
-class MainActivity : AppCompatActivity(), View.OnClickListener {
+class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
 
     private lateinit var floatBtn: FloatingActionButton
     private lateinit var notesAdapter: NotesAdapter
@@ -92,10 +93,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-//    initiate btn reference and clickListener
-    private fun setViewReference(){
-        floatBtn = findViewById(R.id.addNotesBtn)
-        floatBtn.setOnClickListener(this)
+//    listen to floating action btn (fab)
+    override fun onClick(v: View?) {
+        startActivity(Intent(this, AddNotesActivity::class.java))
+    }
+
+//    listen to recycler view item click
+    override fun onClickNotes(view: View, notes: NotesSchema) {
+        Log.d("debugging", "id: ${notes.id}")
     }
 
 //    realm transaction to delete all records
@@ -112,8 +117,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         this.notesAdapter.refresh(query)
     }
 
-    override fun onClick(v: View?) {
-        startActivity(Intent(this, AddNotesActivity::class.java))
+    //    initiate btn reference and clickListener
+    private fun setViewReference(){
+        floatBtn = findViewById(R.id.addNotesBtn)
+        floatBtn.setOnClickListener(this)
     }
 
     private fun setRealm(){
@@ -123,5 +130,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             query -> notesAdapter.refresh(query)
         }
         notesAdapter = NotesAdapter(entries)
+        notesAdapter.onClickNotes = this
     }
 }
