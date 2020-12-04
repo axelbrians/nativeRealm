@@ -1,2 +1,2 @@
 # nativeRealm
-Native android with realm database
+note taking app with realm db
