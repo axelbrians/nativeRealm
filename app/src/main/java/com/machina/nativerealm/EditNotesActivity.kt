@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.machina.nativerealm.model.NotesSchema
 import io.realm.Realm
 import io.realm.kotlin.createObject
-import io.realm.kotlin.where
 
 class EditNotesActivity : AppCompatActivity() {
 
@@ -48,20 +47,24 @@ class EditNotesActivity : AppCompatActivity() {
 
     //  handle adding item to realm db record
     private fun addItem(titleText: String, noteText: String){
+        val id = intent.getIntExtra("EXTRA_ID", 0)
         realm.executeTransaction{
-            val newNote = realm.createObject<NotesSchema>()
-            newNote.title = titleText
-            newNote.note = noteText
-            realm.copyToRealmOrUpdate(newNote)
+            val newNote = realm.where(NotesSchema::class.java).equalTo("id", id).findFirst()
+            if (newNote != null) {
+                newNote.title = titleText
+                newNote.note = noteText
+            }
 
 
-            Log.d(null, "added item to realm")
+            Log.d(null, "edited item with id: $id")
         }
     }
-
     //    set reference for each form
     private fun setViewReference(){
         titleForm = findViewById(R.id.titleForm)
         noteForm = findViewById(R.id.noteForm)
+
+        titleForm.setText(intent.getStringExtra("EXTRA_TITLE"))
+        noteForm.setText(intent.getStringExtra("EXTRA_NOTE"))
     }
 }

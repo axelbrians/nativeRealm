@@ -100,7 +100,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
 
 //    listen to recycler view item click
     override fun onClickNotes(view: View, notes: NotesSchema) {
-        Log.d("debugging", "id: ${notes.id}")
+        val intent = Intent(this, EditNotesActivity::class.java)
+        intent.putExtra("EXTRA_ID", notes.id)
+        intent.putExtra("EXTRA_TITLE", notes.title)
+        intent.putExtra("EXTRA_NOTE", notes.note)
+        startActivity(intent)
+
     }
 
 //    realm transaction to delete all records

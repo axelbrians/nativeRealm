@@ -53,7 +53,7 @@ class AddNotesActivity : AppCompatActivity() {
             val newNote = realm.createObject<NotesSchema>(getId())
             newNote.title = titleText
             newNote.note = noteText
-            realm.copyToRealmOrUpdate(newNote)
+            realm.insertOrUpdate(newNote)
 
 
             Log.d(null, "added item to realm")
