@@ -30,24 +30,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
     private lateinit var realm: Realm
     private lateinit var entries: RealmResults<NotesSchema>
     private lateinit var confirmDialog: AlertDialog
+    private lateinit var notesRV: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.listNotesToolbar))
 
-        val notesRV: RecyclerView = findViewById(R.id.notesRV)
+        notesRV = findViewById(R.id.notesRV)
         setRealm()
+        setAdapter()
 
-        val spacing = 20
-        val staggeredGrid = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        staggeredGrid.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
-        notesRV.apply{
-            layoutManager = staggeredGrid
-            adapter = notesAdapter
-            itemAnimator = DefaultItemAnimator()
-            addItemDecoration(GridSpacingItemDecoration(spacing))
-        }
+
         setViewReference()
     }
 
@@ -136,9 +130,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
     private fun setRealm(){
         realm = Realm.getDefaultInstance()
         entries = realm.where<NotesSchema>().findAll()
-        entries.addChangeListener { query -> notesAdapter.refresh(query)
+        entries.addChangeListener {
+            query -> notesAdapter.refresh(query)
         }
+    }
+
+    private fun setAdapter(){
+
         notesAdapter = NotesAdapter(entries)
         notesAdapter.onClickNotes = this
+
+        val spacing = 20
+        val staggeredGrid = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        staggeredGrid.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS
+
+        notesRV.apply{
+            layoutManager = staggeredGrid
+            adapter = notesAdapter
+            itemAnimator = DefaultItemAnimator()
+            addItemDecoration(GridSpacingItemDecoration(spacing))
+        }
     }
 }
