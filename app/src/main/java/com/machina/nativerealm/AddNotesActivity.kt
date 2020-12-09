@@ -2,8 +2,12 @@ package com.machina.nativerealm
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.Window
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.transition.platform.MaterialContainerTransform
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.machina.nativerealm.model.NotesSchema
 import io.realm.Realm
 import io.realm.kotlin.createObject
@@ -17,6 +21,8 @@ class AddNotesActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_notes)
 

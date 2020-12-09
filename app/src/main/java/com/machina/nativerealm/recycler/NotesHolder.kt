@@ -14,16 +14,28 @@ class NotesHolder(view: View) : RecyclerView.ViewHolder(view) {
     private var notesTitle = view.findViewById<TextView>(R.id.notesTitleTV)
     private var notesNote = view.findViewById<TextView>(R.id.notesTV)
 
-    fun bind(notes: NotesSchema, listener: OnClickNotes?){
-        if(notes.title.length > 37){
+    fun bind(notes: NotesSchema, listener: OnClickNotes?) {
+        if(notes.title.length > 37) {
+
             notesTitle.text = notes.title.substring(0, 37).plus("...")
-        }else{
+
+        }else if(notes.title.isEmpty()) {
+
+            notesTitle.visibility = View.GONE
+
+        }else {
             notesTitle.text = notes.title
         }
 
         if(notes.note.length > 282) {
+
             notesNote.text = notes.note.substring(0, 282).plus("...")
-        }else{
+
+        }else if(notes.note.isEmpty()) {
+
+            notesNote.visibility = View.GONE
+            
+        } else{
             notesNote.text = notes.note
         }
 

@@ -1,19 +1,19 @@
 package com.machina.nativerealm
 
+import android.app.ActivityOptions
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
 import com.machina.nativerealm.customInterface.OnClickNotes
 import com.machina.nativerealm.model.NotesSchema
 import com.machina.nativerealm.recycler.GridSpacingItemDecoration
@@ -33,6 +33,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
     private lateinit var notesRV: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+//        // Enable Activity Transitions. Optionally enable Activity transitions in your
+//        // theme with <item name=”android:windowActivityTransitions”>true</item>.
+//        window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
+//
+//        // Attach a callback used to capture the shared elements from this Activity to be used
+//        // by the container transform transition
+//        setExitSharedElementCallback(MaterialContainerTransformSharedElementCallback())
+//
+//        // Keep system bars (status bar, navigation bar) persistent throughout the transition.
+//        window.sharedElementsUseOverlay = false
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.listNotesToolbar))
@@ -94,17 +106,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
 
 //    listen to floating action btn (fab)
     override fun onClick(v: View?) {
+//        val intent = Intent(this, AddNotesActivity::class.java)
+//        val options = ActivityOptions.makeSceneTransitionAnimation(
+//            this,
+//            findViewById(R.id.start_view),
+//            "shared_element_container" // The transition name to be matched in Activity B.
+//        )
+//
+//        startActivity(intent, options.toBundle())
+
         startActivity(Intent(this, AddNotesActivity::class.java))
     }
-
 //    listen to recycler view item click
     override fun onClickNotes(view: View, notes: NotesSchema) {
         val intent = Intent(this, EditNotesActivity::class.java)
         intent.putExtra("EXTRA_ID", notes.id)
         intent.putExtra("EXTRA_TITLE", notes.title)
         intent.putExtra("EXTRA_NOTE", notes.note)
-        startActivity(intent)
 
+        startActivity(intent)
     }
 
 //    realm transaction to delete all records

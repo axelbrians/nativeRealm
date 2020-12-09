@@ -31,6 +31,6 @@
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp"
         android:src="@drawable/add_floating_btn"
-        />
+        android:contentDescription="Add new note" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
