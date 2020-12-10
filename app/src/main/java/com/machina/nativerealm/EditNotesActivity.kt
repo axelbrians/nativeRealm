@@ -16,30 +16,6 @@ class EditNotesActivity : AppCompatActivity() {
     private lateinit var realm: Realm
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
-//        // Enable Activity Transitions. Optionally enable Activity transitions in your
-//        // theme with <item name=”android:windowActivityTransitions”>true</item>.
-//        window.requestFeature(Window.FEATURE_ACTIVITY_TRANSITIONS)
-//
-//        // Set the transition name, which matches Activity A’s start view transition name, on
-//        // the root view.
-//        findViewById<View>(android.R.id.content).transitionName = "shared_element_container"
-//
-//        // Attach a callback used to receive the shared elements from Activity A to be
-//        // used by the container transform transition.
-//        setEnterSharedElementCallback(MaterialContainerTransformSharedElementCallback())
-//
-//        // Set this Activity’s enter and return transition to a MaterialContainerTransform
-//        window.sharedElementEnterTransition = MaterialContainerTransform().apply {
-//            addTarget(android.R.id.content)
-//            duration = 300L
-//        }
-//        window.sharedElementReturnTransition = MaterialContainerTransform().apply {
-//            addTarget(android.R.id.content)
-//            duration = 250L
-//        }
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_notes)
 
@@ -57,24 +33,22 @@ class EditNotesActivity : AppCompatActivity() {
         Log.d("debugging", "onPause add note")
     }
 
-//    launch editItem onDestroy
+    //    launch editItem onDestroy
     override fun onDestroy() {
         super.onDestroy()
         val titleText = titleForm.text.toString()
         val noteText = noteForm.text.toString()
 
-        if(titleText.isNotEmpty() || noteText.isNotEmpty()) {
+        if (titleText.isNotEmpty() || noteText.isNotEmpty()) {
             editItem(titleText, noteText)
         }
         Log.d("debugging", "onDestroy add note")
     }
 
-
-
     //  handle edit item in realm record
-    private fun editItem(titleText: String, noteText: String){
+    private fun editItem(titleText: String, noteText: String) {
         val id = intent.getIntExtra("EXTRA_ID", 0)
-        realm.executeTransaction{
+        realm.executeTransaction {
             val newNote = realm.where(NotesSchema::class.java).equalTo("id", id).findFirst()
             if (newNote != null) {
                 newNote.title = titleText
@@ -83,8 +57,9 @@ class EditNotesActivity : AppCompatActivity() {
             Log.d(null, "edited item with id: $id")
         }
     }
+
     //    set reference for each form
-    private fun setViewReference(){
+    private fun setViewReference() {
         titleForm = findViewById(R.id.titleForm)
         noteForm = findViewById(R.id.noteForm)
 
