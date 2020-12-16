@@ -1,10 +1,14 @@
 package com.machina.nativerealm
 
 import android.app.ActivityOptions
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.Layout
+import android.util.Log
 import android.view.*
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -31,6 +35,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
     private lateinit var entries: RealmResults<NotesSchema>
     private lateinit var confirmDialog: AlertDialog
     private lateinit var notesRV: RecyclerView
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +66,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
 //    handle action item in toolbar
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle item selection
-        return when (item.itemId) {
+        return when (item.itemId){
 
             R.id.action_deleteAll -> {
 //                create a confirmation dialog when pressed
@@ -107,13 +113,52 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
     }
 //    listen to recycler view item click
     override fun onClickNotes(view: View, notes: NotesSchema) {
+
         val intent = Intent(this, EditNotesActivity::class.java)
+        Log.d("debugging", "binding view")
+
         intent.putExtra("EXTRA_ID", notes.id)
         intent.putExtra("EXTRA_TITLE", notes.title)
         intent.putExtra("EXTRA_NOTE", notes.note)
+        intent.putExtra(TRANSITION_CODE_KEY, TRANSITION_CODE_KEY + notes.id)
+        Log.d("debugging", "putting extra to intent")
 
-        startActivity(intent)
+        val option = ActivityOptions.makeSceneTransitionAnimation(this, view, TRANSITION_CODE_KEY + notes.id)
+        Log.d("debugging", "creating option")
+
+        val bundle = option.toBundle()
+        Log.d("debugging", "option bundled")
+
+        Log.d("debugging", "crash just before call start activity")
+        startActivity(intent, bundle)
     }
+
+    companion object {
+        const val TRANSITION_CODE_KEY = "transitionCode"
+        private const val TRANSITION_CODE_PREFIX = "transition"
+    }
+
+    private fun startWithTransition(transitionCode: String, notes: NotesSchema) {
+        val intent = Intent(this, EditNotesActivity::class.java)
+        val view = findViewById<View>(R.id.notesViewContainer)
+
+        intent.putExtra("EXTRA_ID", notes.id)
+        intent.putExtra("EXTRA_TITLE", notes.title)
+        intent.putExtra("EXTRA_NOTE", notes.note)
+        intent.putExtra(TRANSITION_CODE_KEY, transitionCode)
+
+        val option = ActivityOptions.makeSceneTransitionAnimation(this, view, transitionCode)
+        Log.d("debugging", "created transition option")
+
+        val bundle = option.toBundle()
+        Log.d("debugging", "crash just before call start activity")
+
+        startActivity(intent, bundle)
+
+    }
+
+
+
 
 //    realm transaction to delete all records
     private fun clearItem(){

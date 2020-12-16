@@ -1,9 +1,16 @@
 package com.machina.nativerealm
 
+import android.app.ActivityOptions
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
 import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.machina.nativerealm.model.NotesSchema
 import io.realm.Realm
@@ -19,6 +26,9 @@ class EditNotesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_notes)
 
+        val view = findViewById<View>(R.id.notesViewContainer)
+        view.transitionName = intent.getStringExtra(MainActivity.TRANSITION_CODE_KEY)
+
 //      setUp toolbar
         setSupportActionBar(findViewById(R.id.addNotesToolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -27,10 +37,17 @@ class EditNotesActivity : AppCompatActivity() {
         setViewReference()
     }
 
-    //    launch addItem() when paused, is not perfect yet
-    override fun onPause() {
-        super.onPause()
-        Log.d("debugging", "onPause add note")
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection
+        return if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+            false
+        }
+
+
     }
 
     //    launch editItem onDestroy

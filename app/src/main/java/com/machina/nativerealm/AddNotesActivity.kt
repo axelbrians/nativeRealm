@@ -1,10 +1,13 @@
 package com.machina.nativerealm
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.transition.platform.MaterialContainerTransform
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback
@@ -21,8 +24,6 @@ class AddNotesActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_notes)
 
@@ -33,6 +34,7 @@ class AddNotesActivity : AppCompatActivity() {
         realm = Realm.getDefaultInstance()
         setViewReference()
     }
+
 
 //    launch addItem() when paused, is not perfect yet
     override fun onPause() {

@@ -1,15 +1,17 @@
 package com.machina.nativerealm.recycler
 
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.machina.nativerealm.MainActivity
 import com.machina.nativerealm.model.NotesSchema
 import com.machina.nativerealm.R
 import com.machina.nativerealm.customInterface.OnClickNotes
 import kotlin.properties.Delegates
 
-class NotesHolder(view: View) : RecyclerView.ViewHolder(view) {
+class NotesHolder(private val view: View) : RecyclerView.ViewHolder(view) {
     private var notesCard = view.findViewById<CardView>(R.id.notesCard)
     private var notesTitle = view.findViewById<TextView>(R.id.notesTitleTV)
     private var notesNote = view.findViewById<TextView>(R.id.notesTV)
@@ -17,6 +19,9 @@ class NotesHolder(view: View) : RecyclerView.ViewHolder(view) {
 //    ingat holder buat recyclew view harus di reset ke default state nya, biar tiap rebind gada missmatch
 
     fun bind(notes: NotesSchema, listener: OnClickNotes?) {
+        view.transitionName = MainActivity.TRANSITION_CODE_KEY + notes.id
+        Log.d("debugging", "success binding transitionName ${MainActivity.TRANSITION_CODE_KEY + notes.id}")
+
         notesTitle.visibility = View.VISIBLE
         notesNote.visibility = View.VISIBLE
         if (notes.title.length > 37) {
