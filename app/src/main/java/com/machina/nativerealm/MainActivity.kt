@@ -37,6 +37,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
     private lateinit var notesRV: RecyclerView
 
 
+    companion object {
+        const val TRANSITION_CODE_KEY = "transitionCode"
+        private const val TRANSITION_CODE_PREFIX = "transition"
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,49 +120,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, OnClickNotes {
     override fun onClickNotes(view: View, notes: NotesSchema) {
 
         val intent = Intent(this, EditNotesActivity::class.java)
-        Log.d("debugging", "binding view")
+//        Log.d("debugging", "binding view")
 
         intent.putExtra("EXTRA_ID", notes.id)
         intent.putExtra("EXTRA_TITLE", notes.title)
         intent.putExtra("EXTRA_NOTE", notes.note)
         intent.putExtra(TRANSITION_CODE_KEY, TRANSITION_CODE_KEY + notes.id)
-        Log.d("debugging", "putting extra to intent")
+//        Log.d("debugging", "putting extra to intent")
 
         val option = ActivityOptions.makeSceneTransitionAnimation(this, view, TRANSITION_CODE_KEY + notes.id)
-        Log.d("debugging", "creating option")
+//        Log.d("debugging", "creating option")
 
         val bundle = option.toBundle()
-        Log.d("debugging", "option bundled")
+//        Log.d("debugging", "option bundled")
 
-        Log.d("debugging", "crash just before call start activity")
+//        Log.d("debugging", "crash just before call start activity")
         startActivity(intent, bundle)
     }
-
-    companion object {
-        const val TRANSITION_CODE_KEY = "transitionCode"
-        private const val TRANSITION_CODE_PREFIX = "transition"
-    }
-
-    private fun startWithTransition(transitionCode: String, notes: NotesSchema) {
-        val intent = Intent(this, EditNotesActivity::class.java)
-        val view = findViewById<View>(R.id.notesViewContainer)
-
-        intent.putExtra("EXTRA_ID", notes.id)
-        intent.putExtra("EXTRA_TITLE", notes.title)
-        intent.putExtra("EXTRA_NOTE", notes.note)
-        intent.putExtra(TRANSITION_CODE_KEY, transitionCode)
-
-        val option = ActivityOptions.makeSceneTransitionAnimation(this, view, transitionCode)
-        Log.d("debugging", "created transition option")
-
-        val bundle = option.toBundle()
-        Log.d("debugging", "crash just before call start activity")
-
-        startActivity(intent, bundle)
-
-    }
-
-
 
 
 //    realm transaction to delete all records

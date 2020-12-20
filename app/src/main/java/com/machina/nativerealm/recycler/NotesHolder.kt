@@ -20,7 +20,7 @@ class NotesHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(notes: NotesSchema, listener: OnClickNotes?) {
         view.transitionName = MainActivity.TRANSITION_CODE_KEY + notes.id
-        Log.d("debugging", "success binding transitionName ${MainActivity.TRANSITION_CODE_KEY + notes.id}")
+
 
         notesTitle.visibility = View.VISIBLE
         notesNote.visibility = View.VISIBLE

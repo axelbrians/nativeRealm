@@ -11,10 +11,11 @@
         android:id="@+id/addNotesToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.DayNight.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        android:background="@color/white"
+        app:titleTextColor="@color/black"
+        android:elevation="0dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
 
     <EditText
         android:id="@+id/titleForm"

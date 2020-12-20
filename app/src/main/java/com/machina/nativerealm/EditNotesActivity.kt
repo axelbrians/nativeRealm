@@ -33,6 +33,7 @@ class EditNotesActivity : AppCompatActivity() {
         setSupportActionBar(findViewById(R.id.addNotesToolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+
         realm = Realm.getDefaultInstance()
         setViewReference()
     }
@@ -41,6 +42,7 @@ class EditNotesActivity : AppCompatActivity() {
         // Handle item selection
         return if (item.itemId == android.R.id.home) {
             onBackPressed()
+            Log.d("debugging", "onBackPressed() called")
             true
         } else {
             super.onOptionsItemSelected(item)
@@ -59,8 +61,10 @@ class EditNotesActivity : AppCompatActivity() {
         if (titleText.isNotEmpty() || noteText.isNotEmpty()) {
             editItem(titleText, noteText)
         }
-        Log.d("debugging", "onDestroy add note")
+        Log.d("debugging", "onDestroy edit note")
     }
+
+
 
     //  handle edit item in realm record
     private fun editItem(titleText: String, noteText: String) {

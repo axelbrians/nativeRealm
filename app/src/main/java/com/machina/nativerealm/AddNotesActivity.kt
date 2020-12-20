@@ -22,6 +22,8 @@ class AddNotesActivity : AppCompatActivity() {
     private lateinit var noteForm: EditText
     private lateinit var realm: Realm
 
+    private val DG = "Debug AddNotesActivity"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +41,7 @@ class AddNotesActivity : AppCompatActivity() {
 //    launch addItem() when paused, is not perfect yet
     override fun onPause() {
         super.onPause()
-        Log.d("debugging", "onPause add note")
+        Log.d(DG, "onPause add note")
     }
 
     override fun onDestroy() {
@@ -50,7 +52,7 @@ class AddNotesActivity : AppCompatActivity() {
         if(titleText.isNotEmpty() || noteText.isNotEmpty()) {
             addItem(titleText, noteText)
         }
-        Log.d("debugging", "onDestroy add note")
+        Log.d(DG, "onDestroy add note")
     }
 
 
